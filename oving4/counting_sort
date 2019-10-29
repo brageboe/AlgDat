@@ -1,0 +1,21 @@
+function counting_sort(A::Array{Int64,1}, k::Int64)
+    #k = 'z'-'a'+1   # assume all strings in A contains small letters a-z.
+    C = Array{Int64,1}(undef, k)  # tmp storage array of "number of occurances of each char-value".
+    B = Array{Int64,1}(undef, length(A)) # output array
+    for i = 1:k
+        C[i] = 0    # zero occurances of i yet.
+    end
+    for j = 1:length(A)
+        C[A[j]] = C[A[j]] + 1   # count number of times A[j] occurs
+    end
+    for i = 2:k
+        C[i] = C[i] + C[i-1]    # let C accumulate. C[i] = where should the last i be?
+    end
+    for j = length(A):-1:1  # descending as not to trade equal values => stable
+        B[C[A[j]]] = A[j]   # i = A[j]
+        C[A[j]] = C[A[j]] - 1   # the next i should be one step to the left
+    end
+    return B
+end
+A = [2,5,3,1,2,3,1,3]
+B = counting_sort(A,5)
